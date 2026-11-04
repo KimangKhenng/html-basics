@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Log in</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS v4 (browser build): generates the CSS for the classes used in this page. -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style type="text/tailwindcss">
+      @theme {
+        --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+      }
+
+      /* Dot canvas sits behind the card; the dots are drawn by the script below */
+      @layer components {
+        .dot-canvas {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          z-index: -10;
+          pointer-events: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="min-h-dvh bg-zinc-50 font-sans text-zinc-900 antialiased">
+    <main class="relative isolate flex min-h-dvh items-center justify-center overflow-hidden px-4 py-10">
+      <!-- Animated dot pattern (behind the card), reacts to the mouse -->
+      <canvas id="dots" aria-hidden="true" class="dot-canvas"></canvas>
+
+      <section
+        class="w-full max-w-[400px] rounded-2xl border border-zinc-200 bg-white/95 p-6 shadow-xl shadow-zinc-900/5 backdrop-blur-sm sm:p-8"
+      >
+        <!-- Header -->
+        <header class="text-center">
+          <div
+            class="mx-auto grid size-11 place-items-center rounded-xl bg-zinc-900 text-lg font-bold text-white"
+          >
+            K
+          </div>
+          <h1 class="mt-5 text-2xl font-semibold tracking-tight">Welcome back</h1>
+          <p class="mt-1.5 text-sm text-zinc-500">Sign in to continue to your account.</p>
+        </header>
+
+        <!-- Form -->
+        <form id="login-form" novalidate class="mt-7 space-y-5">
+          <!-- Email -->
+          <div>
+            <label for="email" class="block text-sm font-medium text-zinc-700">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              placeholder="you@example.com"
+              aria-describedby="email-error"
+              class="mt-1.5 block w-full rounded-lg border border-zinc-300 bg-white px-3.5 py-2.5 text-sm placeholder:text-zinc-400 transition focus:border-zinc-900 focus:ring-4 focus:ring-zinc-900/10 focus:outline-none aria-[invalid=true]:border-red-500 aria-[invalid=true]:ring-4 aria-[invalid=true]:ring-red-500/10"
+            />
+            <p id="email-error" class="mt-1.5 hidden text-sm text-red-600"></p>
+          </div>
+
+          <!-- Password -->
+          <div>
+            <div class="flex items-center justify-between">
+              <label for="password" class="block text-sm font-medium text-zinc-700">Password</label>
+              <a href="#" class="text-sm font-medium text-zinc-600 hover:text-zinc-900 hover:underline">
+                Forgot password?
+              </a>
+            </div>
+            <div class="relative mt-1.5">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                placeholder="••••••••"
+                aria-describedby="password-error"
+                class="block w-full rounded-lg border border-zinc-300 bg-white py-2.5 pr-11 pl-3.5 text-sm placeholder:text-zinc-400 transition focus:border-zinc-900 focus:ring-4 focus:ring-zinc-900/10 focus:outline-none aria-[invalid=true]:border-red-500 aria-[invalid=true]:ring-4 aria-[invalid=true]:ring-red-500/10"
+              />
+              <button
+                type="button"
+                id="toggle-password"
+                aria-label="Show password"
+                aria-pressed="false"
+                class="absolute inset-y-0 right-0 grid w-11 place-items-center rounded-r-lg text-zinc-500 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-zinc-900"
+              >
+                <!-- eye (shown while password is hidden) -->
+                <svg id="icon-eye" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5">
+                  <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <!-- eye-off (shown while password is visible) -->
+                <svg id="icon-eye-off" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden size-5">
+                  <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
+                  <path d="M10.73 5.08A10.4 10.4 0 0 1 12 5c6.5 0 10 7 10 7a18.5 18.5 0 0 1-2.16 3.19M6.61 6.61A18.6 18.6 0 0 0 2 12s3.5 7 10 7a9.7 9.7 0 0 0 5.39-1.61" />
+                  <path d="m2 2 20 20" />
+                </svg>
+              </button>
+            </div>
+            <p id="password-error" class="mt-1.5 hidden text-sm text-red-600"></p>
+          </div>
+
+          <!-- Remember me -->
+          <div class="flex items-center gap-2">
+            <input
+              id="remember"
+              name="remember"
+              type="checkbox"
+              class="size-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900"
+            />
+            <label for="remember" class="text-sm text-zinc-600">Remember me for 30 days</label>
+          </div>
+
+          <!-- Status message (success / general errors) -->
+          <p id="form-status" role="status" class="hidden rounded-lg px-3.5 py-2.5 text-sm"></p>
+
+          <!-- Submit -->
+          <button
+            type="submit"
+            id="submit-btn"
+            class="flex w-full items-center justify-center gap-2 rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 disabled:cursor-not-allowed disabled:opacity-70"
+          >
+            <svg id="spinner" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="hidden size-4 animate-spin">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" class="opacity-25" />
+              <path d="M22 12a10 10 0 0 0-10-10" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+            </svg>
+            <span id="submit-label">Sign in</span>
+          </button>
+        </form>
+
+        <!-- Footer -->
+        <p class="mt-6 text-center text-sm text-zinc-600">
+          Don't have an account?
+          <a href="#" class="font-semibold text-zinc-900 hover:underline">Create one</a>
+        </p>
+      </section>
+    </main>
+
+    <script>
+      /* ---------- Animated dot field ---------- */
+      (() => {
+        const canvas = document.getElementById('dots');
+        const ctx = canvas.getContext('2d');
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        const COLOR = '113,113,122'; // zinc-500 (rgb)
+        const HOVER_RADIUS = 170;    // how far the cursor reaches, in px
+        const PUSH = 16;             // how far dots are pushed away from the cursor
+
+        let width = 0;
+        let height = 0;
+        let dpr = 1;
+        let dots = [];
+        const mouse = { x: -9999, y: -9999 };   // smoothed position
+        const target = { x: -9999, y: -9999 };  // real pointer position
+
+        // Cluster strength (0..1) at a point: big soft blobs in the corners
+        function clusterStrength(x, y) {
+          const m = Math.max(width, height);
+          const anchors = [
+            { x: 0, y: 0, r: m * 0.5 },
+            { x: width, y: height, r: m * 0.55 },
+            { x: width, y: 0, r: m * 0.32 },
+            { x: 0, y: height, r: m * 0.32 },
+          ];
+          let best = 0;
+          for (const a of anchors) {
+            const d = Math.hypot(x - a.x, y - a.y) / a.r;
+            if (d < 1) best = Math.max(best, Math.pow(1 - d, 2.2));
+          }
+          return best;
+        }
+
+        function build() {
+          const rect = canvas.getBoundingClientRect();
+          width = rect.width;
+          height = rect.height;
+          dpr = window.devicePixelRatio || 1;
+          canvas.width = Math.round(width * dpr);
+          canvas.height = Math.round(height * dpr);
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+          const spacing = width >= 640 ? 28 : 22;
+          dots = [];
+          for (let x = spacing / 2; x < width; x += spacing) {
+            for (let y = spacing / 2; y < height; y += spacing) {
+              const base = clusterStrength(x, y);
+              if (base < 0.08) continue; // skip empty / very faint areas
+              dots.push({ x, y, base, phase: (x * 0.013 + y * 0.021) });
+            }
+          }
+        }
+
+        function frame(now) {
+          mouse.x += (target.x - mouse.x) * 0.18;
+          mouse.y += (target.y - mouse.y) * 0.18;
+          const t = reduceMotion ? 0 : now * 0.0012;
+
+          ctx.clearRect(0, 0, width, height);
+
+          for (const d of dots) {
+            // Gentle travelling wave so the clusters breathe
+            const wave = reduceMotion ? 0.5 : 0.5 + 0.5 * Math.sin(t - d.phase);
+
+            // Cursor influence (0 far away, 1 right on the cursor)
+            const dx = d.x - mouse.x;
+            const dy = d.y - mouse.y;
+            const dist = Math.hypot(dx, dy);
+            const hover = Math.max(0, 1 - dist / HOVER_RADIUS);
+            const influence = hover * hover;
+
+            // Push dots away from the cursor
+            let px = d.x;
+            let py = d.y;
+            if (dist > 0.01 && influence > 0) {
+              px += (dx / dist) * influence * PUSH;
+              py += (dy / dist) * influence * PUSH;
+            }
+
+            const alpha = Math.min(1, d.base * (0.45 + 0.4 * wave) + influence * 0.8);
+            const radius = 1.1 + d.base * 0.6 + influence * 1.8;
+
+            ctx.fillStyle = `rgba(${COLOR},${alpha.toFixed(3)})`;
+            ctx.beginPath();
+            ctx.arc(px, py, radius, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          requestAnimationFrame(frame);
+        }
+
+        function setTarget(e) {
+          const rect = canvas.getBoundingClientRect();
+          target.x = e.clientX - rect.left;
+          target.y = e.clientY - rect.top;
+          // First contact: snap instead of easing in from off-screen
+          if (mouse.x < -1000) {
+            mouse.x = target.x;
+            mouse.y = target.y;
+          }
+        }
+
+        function resetTarget() {
+          target.x = -9999;
+          target.y = -9999;
+        }
+
+        window.addEventListener('pointermove', setTarget, { passive: true });
+        window.addEventListener('pointerdown', setTarget, { passive: true });
+        window.addEventListener('pointerout', (e) => {
+          if (!e.relatedTarget) resetTarget(); // pointer left the window
+        });
+        window.addEventListener('resize', build);
+
+        build();
+        requestAnimationFrame(frame);
+      })();
+
+      const form = document.getElementById('login-form');
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const emailError = document.getElementById('email-error');
+      const passwordError = document.getElementById('password-error');
+      const statusEl = document.getElementById('form-status');
+      const submitBtn = document.getElementById('submit-btn');
+      const submitLabel = document.getElementById('submit-label');
+      const spinner = document.getElementById('spinner');
+      const toggleBtn = document.getElementById('toggle-password');
+      const iconEye = document.getElementById('icon-eye');
+      const iconEyeOff = document.getElementById('icon-eye-off');
+
+      const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const MIN_PASSWORD = 8;
+
+      function setFieldError(input, errorEl, message) {
+        errorEl.textContent = message;
+        errorEl.classList.toggle('hidden', !message);
+        input.setAttribute('aria-invalid', message ? 'true' : 'false');
+      }
+
+      function validate() {
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+        let ok = true;
+
+        if (!email) {
+          setFieldError(emailInput, emailError, 'Please enter your email.');
+          ok = false;
+        } else if (!EMAIL_RE.test(email)) {
+          setFieldError(emailInput, emailError, 'Please enter a valid email address.');
+          ok = false;
+        } else {
+          setFieldError(emailInput, emailError, '');
+        }
+
+        if (!password) {
+          setFieldError(passwordInput, passwordError, 'Please enter your password.');
+          ok = false;
+        } else if (password.length < MIN_PASSWORD) {
+          setFieldError(passwordInput, passwordError, `Password must be at least ${MIN_PASSWORD} characters.`);
+          ok = false;
+        } else {
+          setFieldError(passwordInput, passwordError, '');
+        }
+
+        return ok;
+      }
+
+      function showStatus(message, type) {
+        statusEl.textContent = message;
+        statusEl.className = `rounded-lg px-3.5 py-2.5 text-sm ${
+          type === 'success' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'
+        }`;
+      }
+
+      // Clear errors while the user is typing
+      emailInput.addEventListener('input', () => setFieldError(emailInput, emailError, ''));
+      passwordInput.addEventListener('input', () => setFieldError(passwordInput, passwordError, ''));
+
+      // Show / hide password
+      toggleBtn.addEventListener('click', () => {
+        const isHidden = passwordInput.type === 'password';
+        passwordInput.type = isHidden ? 'text' : 'password';
+        toggleBtn.setAttribute('aria-pressed', String(isHidden));
+        toggleBtn.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+        iconEye.classList.toggle('hidden', isHidden);
+        iconEyeOff.classList.toggle('hidden', !isHidden);
+      });
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        statusEl.classList.add('hidden');
+
+        if (!validate()) {
+          // Focus the first invalid field
+          (emailError.classList.contains('hidden') ? passwordInput : emailInput).focus();
+          return;
+        }
+
+        // Loading state
+        submitBtn.disabled = true;
+        spinner.classList.remove('hidden');
+        submitLabel.textContent = 'Signing in…';
+
+        try {
+          // TODO: replace this with your real login request, e.g.
+          // const res = await fetch('/api/login', { method: 'POST', headers: {'Content-Type': 'application/json'},
+          //   body: JSON.stringify({ email: emailInput.value.trim(), password: passwordInput.value,
+          //   remember: document.getElementById('remember').checked }) });
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          showStatus('Demo only: no backend is connected yet.', 'success');
+        } catch (err) {
+          showStatus('Something went wrong. Please try again.', 'error');
+        } finally {
+          submitBtn.disabled = false;
+          spinner.classList.add('hidden');
+          submitLabel.textContent = 'Sign in';
+        }
+      });
+    </script>
+  </body>
+</html>

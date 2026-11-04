@@ -1,0 +1,521 @@
+      /* Apply to all paragraph elements */
+      /* Ctr + / */
+      /* p {
+        color: red;
+        font-size: 18px;
+      } */
+      /* #list {
+        color: red;
+        font-size: 18px;
+      }
+      #about {
+        color: blue;
+        background-color: black;
+      } */
+      .big-font {
+          font-weight: 800;
+          color: brown;
+      }
+
+      /* ---------- Brutalist portfolio styles ---------- */
+      /* Brutalism = raw, loud, no softness:
+         thick black borders, hard shadows (no blur), flat bright colors,
+         monospace type, sharp corners. */
+
+      /* Variables: define a color once, reuse it with var(--name) */
+      :root {
+          --bg: #fff8e7;
+          --card: #ffffff;
+          --text: #000000;
+          --yellow: #ffe600;
+          --pink: #ff4f9a;
+          --cyan: #3de0ff;
+          --green: #8dff6a;
+          --border: 3px solid #000;
+          --shadow: 6px 6px 0 #000; /* offset shadow, 0 blur = hard edge */
+      }
+
+      /* Make width/height include padding and border (easier math) */
+      * {
+          box-sizing: border-box;
+      }
+
+      html {
+          scroll-behavior: smooth;
+      }
+
+      body {
+          margin: 0;
+          padding: 0 16px 48px;
+          background-color: var(--bg);
+          color: var(--text);
+          font-family: "Courier New", Courier, ui-monospace, monospace;
+          font-size: 1.05rem;
+          line-height: 1.6;
+
+          /* FLEXBOX 1: stack header / main / footer in a column that is
+             at least as tall as the screen, so the footer sticks to the
+             bottom even when the page is short */
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
+      }
+
+      /* Center the page content and limit its width */
+      header,
+      main,
+      footer {
+          width: 100%; /* flex items shrink to fit, so ask for full width */
+          max-width: 860px;
+          margin: 0 auto;
+      }
+
+      /* main grows to fill the empty space, pushing the footer down */
+      main {
+          flex: 1;
+      }
+
+      /* ----- Header ----- */
+      /* GRID 1: named areas. Draw the layout as a picture:
+         row 1 = title (left) + role badge (right), row 2 = nav full width.
+         "1fr auto" = first column takes the leftover space, second is only
+         as wide as its content. */
+      header {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          grid-template-areas:
+              "title role"
+              "nav   nav";
+          align-items: center;
+          column-gap: 16px;
+          margin-top: 32px;
+          padding: 28px;
+          background-color: var(--yellow);
+          border: var(--border);
+          box-shadow: var(--shadow);
+      }
+
+      header h1 {
+          grid-area: title; /* put this item in the area named "title" */
+          margin: 0;
+          font-size: clamp(2.2rem, 8vw, 4.2rem);
+          line-height: 1;
+          text-transform: uppercase;
+          font-weight: 900;
+          letter-spacing: -0.04em;
+      }
+
+      header p {
+          grid-area: role;
+          margin: 0;
+          padding: 2px 10px;
+          background-color: #000;
+          color: var(--yellow);
+          text-transform: uppercase;
+      }
+
+      /* ----- Navigation: a row of chunky buttons ----- */
+      nav {
+          grid-area: nav;
+          margin-top: 20px;
+      }
+
+      /* FLEXBOX 2: a row (default direction) of buttons that wrap to a new
+         line when there is no room, with 12px between them */
+      nav ul {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 12px;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+      }
+
+      /* flex: 1 1 auto = flex-grow 1, so every button stretches to share
+         the leftover space on its row equally */
+      nav li {
+          flex: 1 1 auto;
+      }
+
+      nav a {
+          text-align: center;
+          display: block;
+          padding: 14px 28px;
+          background-color: var(--card);
+          border: var(--border);
+          box-shadow: 4px 4px 0 #000;
+          color: #000;
+          font-size: 1.15rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          text-decoration: none;
+      }
+
+      /* On hover the button moves INTO its shadow, like being pressed */
+      nav a:hover {
+          background-color: var(--pink);
+          transform: translate(4px, 4px);
+          box-shadow: 0 0 0 #000;
+      }
+
+      /* ----- Links ----- */
+      a {
+          color: #000;
+          font-weight: 700;
+          text-decoration-thickness: 3px;
+          text-underline-offset: 3px;
+      }
+
+      a:hover {
+          background-color: var(--yellow);
+      }
+
+      /* ----- Divider lines ----- */
+      hr {
+          width: 100%;
+          border: none;
+          border-top: 6px solid #000;
+          margin: 36px auto;
+          max-width: 860px;
+      }
+
+      /* Sections look like hard-edged cards */
+      section {
+          margin-bottom: 36px;
+          padding: 24px 28px;
+          background-color: var(--card);
+          border: var(--border);
+          box-shadow: var(--shadow);
+      }
+
+      /* Give each card its own accent color */
+      #skills {
+          background-color: var(--cyan);
+      }
+
+      #experience {
+          background-color: var(--green);
+      }
+
+      #contact {
+          background-color: var(--pink);
+      }
+
+      /* hr between cards is redundant, so hide those inside main */
+      main hr {
+          display: none;
+      }
+
+      h2 {
+          display: inline-block;
+          margin: 0 0 16px;
+          padding: 4px 14px;
+          background-color: #000;
+          color: #fff;
+          font-size: 1.6rem;
+          text-transform: uppercase;
+          letter-spacing: 0.04em;
+          transform: rotate(-1.5deg); /* slightly crooked on purpose */
+      }
+
+      h3 {
+          margin: 20px 0 6px;
+          text-transform: uppercase;
+      }
+
+      /* FLEXBOX 3: project cards sit side by side and wrap.
+         The section is the flex container; its children (h2 + articles)
+         are the flex items. */
+      #projects {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 16px;
+      }
+
+      /* the title takes a whole row; max-width keeps the black label
+         only as wide as its text */
+      #projects h2 {
+          flex-basis: 100%;
+          max-width: max-content;
+          margin-bottom: 0;
+      }
+
+      /* each card: grow 1, shrink 1, start at 220px wide */
+      #projects article {
+          flex: 1 1 220px;
+          margin-top: 0;
+      }
+
+      /* GRID 2: two equal columns for the two skill lists.
+         "1fr 1fr" = two columns, each one share of the free space.
+         Items are placed by line number with grid-column / grid-row. */
+      #skills {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          column-gap: 24px;
+      }
+
+      /* 1 / -1 = from the first grid line to the last: span every column */
+      #skills h2 {
+          grid-column: 1 / -1;
+          justify-self: start; /* keep the label as wide as its text */
+      }
+
+      #skills h3:nth-of-type(1) {
+          grid-column: 1;
+          grid-row: 2;
+      }
+
+      #skills ul:nth-of-type(1) {
+          grid-column: 1;
+          grid-row: 3;
+      }
+
+      #skills h3:nth-of-type(2) {
+          grid-column: 2;
+          grid-row: 2;
+      }
+
+      #skills ul:nth-of-type(2) {
+          grid-column: 2;
+          grid-row: 3;
+      }
+
+      /* GRID 3: a responsive grid with no media query.
+         repeat(auto-fit, minmax(220px, 1fr)) means: "make as many columns
+         as fit, each at least 220px wide, and share the extra space". */
+      #education ol {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 16px;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+      }
+
+      #education li {
+          padding: 14px 18px;
+          background-color: var(--yellow);
+          border: var(--border);
+          box-shadow: 4px 4px 0 #000;
+      }
+
+      #education li:nth-child(even) {
+          background-color: var(--pink);
+      }
+
+      /* ----- Lists ----- */
+      ul,
+      ol {
+          padding-left: 1.4em;
+      }
+
+      li::marker {
+          font-weight: 900;
+      }
+
+      /* ----- Project cards ----- */
+      article {
+          margin-top: 16px;
+          padding: 12px 18px;
+          background-color: var(--yellow);
+          border: var(--border);
+          box-shadow: 4px 4px 0 #000;
+      }
+
+      article:nth-of-type(even) {
+          background-color: var(--card);
+      }
+
+      article h3 {
+          margin-top: 0;
+      }
+
+      article p {
+          margin: 4px 0;
+      }
+
+      /* ----- Table ----- */
+      table {
+          width: 100%;
+          border-collapse: collapse; /* merge double borders */
+          background-color: var(--card);
+          border: var(--border);
+      }
+
+      caption {
+          text-align: left;
+          font-weight: 700;
+          text-transform: uppercase;
+          padding-bottom: 8px;
+      }
+
+      th,
+      td {
+          text-align: left;
+          padding: 10px 12px;
+          border: var(--border);
+      }
+
+      th {
+          background-color: #000;
+          color: var(--yellow);
+          text-transform: uppercase;
+      }
+
+      /* ----- Form ----- */
+      /* GRID 4: name and email side by side, everything else full width.
+         gap = row-gap + column-gap in one line. */
+      form {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px 20px;
+      }
+
+      form p {
+          margin: 0;
+      }
+
+      /* from the 3rd paragraph on (reason, message, button): span both columns */
+      form p:nth-child(n + 3) {
+          grid-column: 1 / -1;
+      }
+
+      form textarea {
+          max-width: 100%;
+      }
+
+      /* FLEXBOX 4: the social links in a row */
+      #contact ul {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 16px;
+          list-style: none;
+          padding: 0;
+      }
+
+      label {
+          font-weight: 900;
+          text-transform: uppercase;
+      }
+
+      input,
+      select,
+      textarea {
+          width: 100%;
+          max-width: 440px;
+          padding: 8px 10px;
+          background-color: var(--card);
+          border: var(--border);
+          border-radius: 0; /* sharp corners */
+          box-shadow: 4px 4px 0 #000;
+          font: inherit;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+          outline: none;
+          background-color: var(--yellow);
+          box-shadow: 8px 8px 0 #000;
+      }
+
+      button {
+          padding: 12px 26px;
+          background-color: var(--yellow);
+          border: var(--border);
+          border-radius: 0;
+          box-shadow: var(--shadow);
+          color: #000;
+          font: inherit;
+          font-weight: 900;
+          text-transform: uppercase;
+          cursor: pointer;
+      }
+
+      button:hover {
+          background-color: var(--green);
+      }
+
+      button:active {
+          transform: translate(6px, 6px);
+          box-shadow: 0 0 0 #000;
+      }
+
+      /* ----- Footer ----- */
+      /* FLEXBOX 5: copyright on the left, "Back to top" on the right.
+         justify-content works along the row, align-items across it */
+      footer {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          align-items: center;
+          gap: 8px;
+          padding: 16px 20px;
+          background-color: #000;
+          color: #fff;
+          text-transform: uppercase;
+          font-size: 0.9rem;
+      }
+
+      footer p {
+          margin: 4px 0;
+      }
+
+      footer a {
+          color: var(--yellow);
+      }
+
+      footer a:hover {
+          color: #000;
+      }
+
+      /* ----- Small screens ----- */
+      @media (max-width: 600px) {
+          header,
+          section {
+              padding: 18px;
+          }
+
+          /* grids collapse to a single column on phones.
+             Redefine the header "picture" with one column. */
+          header {
+              grid-template-columns: 1fr;
+              grid-template-areas:
+                  "title"
+                  "role"
+                  "nav";
+              row-gap: 12px;
+          }
+
+          header p {
+              justify-self: start;
+          }
+
+          nav {
+              margin-top: 8px;
+          }
+
+          #skills {
+              grid-template-columns: 1fr;
+          }
+
+          #skills h3:nth-of-type(n),
+          #skills ul:nth-of-type(n) {
+              grid-column: 1;
+              grid-row: auto; /* back to normal top-to-bottom order */
+          }
+
+          form {
+              grid-template-columns: 1fr;
+          }
+
+          table {
+              font-size: 0.85rem;
+          }
+
+          th,
+          td {
+              padding: 6px;
+          }
+      }
