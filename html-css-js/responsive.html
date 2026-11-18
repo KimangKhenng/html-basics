@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Responsive</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+      /* .box {
+        height: 100vh;
+        background-color: blue;
+        width: 400px;
+        padding: 50px;
+      }
+      .container {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 50px;
+      }
+      .text {
+        background-color: aqua;
+        font-size: 20px;
+      }
+      @media (max-width: 600px) {
+        .container {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+        .text {
+          display: none;
+        }
+      } */
+    </style>
+  </head>
+  <body>
+    <div class="flex flex-col gap-2 justify-center md:flex-row">
+      <div class="text">Hello</div>
+      <div class="p-10 bg-blue-500">1st Widget</div>
+      <div class="p-10 bg-blue-500">2nd Widget</div>
+    </div>
+  </body>
+</html>

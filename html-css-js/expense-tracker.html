@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Expense Tracker</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS v4 (browser build): generates the CSS for the classes used in this page. -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style type="text/tailwindcss">
+      @theme {
+        --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+      }
+
+      @layer components {
+        /* Card style shared with login.html */
+        .card {
+          @apply rounded-2xl border border-zinc-200 bg-white/95 shadow-xl shadow-zinc-900/5 backdrop-blur-sm;
+        }
+
+        /* Faint dot grid, a calmer cousin of the animated dots on login.html */
+        .dot-bg {
+          background-image: radial-gradient(circle, rgb(212 212 216) 1px, transparent 1px);
+          background-size: 22px 22px;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="min-h-dvh bg-zinc-50 font-sans text-zinc-900 antialiased">
+    <!-- Mobile overlay (behind the open sidebar) -->
+    <div id="overlay" class="fixed inset-0 z-30 hidden bg-zinc-900/40 backdrop-blur-[2px] lg:hidden"></div>
+
+    <!-- Sidebar: hidden off-canvas on mobile, fixed on the left from lg up -->
+    <aside
+      id="sidebar"
+      class="fixed inset-y-0 left-0 z-40 flex w-64 -translate-x-full flex-col border-r border-zinc-200 bg-white transition-transform duration-200 ease-out lg:translate-x-0"
+    >
+      <div class="flex h-16 items-center justify-between px-5">
+        <div class="flex items-center gap-3">
+          <div class="grid size-9 place-items-center rounded-lg bg-zinc-900 text-sm font-bold text-white">K</div>
+          <span class="font-semibold tracking-tight">Expense Tracker</span>
+        </div>
+        <button
+          id="close-sidebar"
+          type="button"
+          aria-label="Close menu"
+          class="grid size-9 place-items-center rounded-lg text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 lg:hidden"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5">
+            <path d="m6 6 12 12M18 6 6 18" />
+          </svg>
+        </button>
+      </div>
+
+      <nav class="flex-1 space-y-1 px-3 py-4" aria-label="Main">
+        <p class="px-3 pb-2 text-xs font-semibold tracking-wider text-zinc-400 uppercase">Menu</p>
+
+        <a href="#" aria-current="page" class="flex items-center gap-3 rounded-lg bg-zinc-900 px-3 py-2.5 text-sm font-medium text-white shadow-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5">
+            <path d="M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z" />
+          </svg>
+          Dashboard
+        </a>
+
+        <a href="#" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5">
+            <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+          </svg>
+          Transactions
+        </a>
+
+        <a href="#" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5">
+            <path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0 0 4h14a2 2 0 0 1 2 2v3" />
+            <path d="M3 5v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3" />
+            <path d="M21 12h-4a2 2 0 0 0 0 4h4z" />
+          </svg>
+          Budgets
+        </a>
+
+        <a href="#" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5">
+            <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+            <path d="M22 12A10 10 0 0 0 12 2v10z" />
+          </svg>
+          Reports
+        </a>
+
+        <a href="#" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5">
+            <path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6" />
+          </svg>
+          Settings
+        </a>
+      </nav>
+
+      <div class="border-t border-zinc-200 p-4">
+        <div class="flex items-center gap-3">
+          <div class="grid size-9 shrink-0 place-items-center rounded-full bg-zinc-200 text-sm font-semibold text-zinc-700">KK</div>
+          <div class="min-w-0">
+            <p class="truncate text-sm font-medium">Kim Ang Kheang</p>
+            <p class="truncate text-xs text-zinc-500">Personal account</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main content (offset by the sidebar width on desktop) -->
+    <div class="lg:pl-64">
+      <header class="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-zinc-200 bg-white/90 px-4 backdrop-blur-sm sm:px-6 lg:px-8">
+        <button
+          id="open-sidebar"
+          type="button"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="sidebar"
+          class="grid size-9 place-items-center rounded-lg text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 lg:hidden"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5">
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <div class="min-w-0">
+          <h1 class="text-lg font-semibold tracking-tight">Dashboard</h1>
+          <p id="today" class="truncate text-sm text-zinc-500"></p>
+        </div>
+      </header>
+
+      <main class="dot-bg min-h-[calc(100dvh-4rem)] p-4 sm:p-6 lg:p-8">
+        <!-- Stat grid -->
+        <section aria-label="Key statistics" class="grid grid-cols-[minmax(0,1fr)] gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <article class="card p-5 sm:p-6">
+            <p class="text-sm font-medium text-zinc-500">Total balance</p>
+            <p id="stat-balance" class="mt-2 text-2xl font-semibold tracking-tight tabular-nums">—</p>
+            <p class="mt-3 text-sm text-zinc-500">Opening balance plus all tracked months</p>
+          </article>
+
+          <article class="card p-5 sm:p-6">
+            <p class="text-sm font-medium text-zinc-500">Income this month</p>
+            <p id="stat-income" class="mt-2 text-2xl font-semibold tracking-tight tabular-nums">—</p>
+            <div id="stat-income-delta" class="mt-3 flex flex-wrap items-center gap-2 text-sm"></div>
+          </article>
+
+          <article class="card p-5 sm:p-6">
+            <p class="text-sm font-medium text-zinc-500">Expenses this month</p>
+            <p id="stat-expenses" class="mt-2 text-2xl font-semibold tracking-tight tabular-nums">—</p>
+            <div id="stat-expenses-delta" class="mt-3 flex flex-wrap items-center gap-2 text-sm"></div>
+          </article>
+
+          <article class="card p-5 sm:p-6">
+            <p class="text-sm font-medium text-zinc-500">Savings rate</p>
+            <p id="stat-savings" class="mt-2 text-2xl font-semibold tracking-tight tabular-nums">—</p>
+            <div id="stat-savings-delta" class="mt-3 flex flex-wrap items-center gap-2 text-sm"></div>
+          </article>
+        </section>
+
+        <!-- Chart + category breakdown -->
+        <section class="mt-6 grid grid-cols-[minmax(0,1fr)] gap-6 xl:grid-cols-3">
+          <article class="card min-w-0 p-5 sm:p-6 xl:col-span-2">
+            <div class="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <h2 class="text-base font-semibold">Cash flow</h2>
+                <p class="text-sm text-zinc-500">Income vs. expenses, last 6 months</p>
+              </div>
+              <div class="flex items-center gap-4 text-sm text-zinc-600">
+                <span class="inline-flex items-center gap-2"><span class="size-2.5 rounded-sm bg-zinc-300"></span>Income</span>
+                <span class="inline-flex items-center gap-2"><span class="size-2.5 rounded-sm bg-zinc-900"></span>Expenses</span>
+              </div>
+            </div>
+            <div id="chart" class="mt-6 flex h-64 items-end gap-2 sm:gap-4"></div>
+          </article>
+
+          <article class="card min-w-0 p-5 sm:p-6">
+            <h2 class="text-base font-semibold">Spending by category</h2>
+            <p class="text-sm text-zinc-500">This month so far</p>
+            <ul id="categories" class="mt-6 space-y-5"></ul>
+          </article>
+        </section>
+
+        <!-- Recent transactions -->
+        <section class="mt-6">
+          <article class="card overflow-hidden">
+            <div class="flex items-center justify-between border-b border-zinc-200 px-5 py-4 sm:px-6">
+              <h2 class="text-base font-semibold">Recent transactions</h2>
+              <a href="#" class="text-sm font-medium text-zinc-600 hover:text-zinc-900 hover:underline">View all</a>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm">
+                <thead class="bg-zinc-50 text-xs font-medium tracking-wide text-zinc-500 uppercase">
+                  <tr>
+                    <th scope="col" class="px-5 py-3 font-medium sm:px-6">Description</th>
+                    <th scope="col" class="hidden px-5 py-3 font-medium sm:table-cell">Category</th>
+                    <th scope="col" class="px-5 py-3 font-medium">Date</th>
+                    <th scope="col" class="px-5 py-3 text-right font-medium sm:px-6">Amount</th>
+                  </tr>
+                </thead>
+                <tbody id="tx-body" class="divide-y divide-zinc-100"></tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      (() => {
+        const $ = (id) => document.getElementById(id);
+        const esc = (s) =>
+          String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+        const usd = (n, opts = {}) =>
+          new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0, ...opts }).format(n);
+
+        /* ---------- Sample data (replace with your real data source) ---------- */
+        const OPENING_BALANCE = 4800;
+
+        // Completed months (oldest first)
+        const history = [
+          { label: 'Jun', income: 3100, expense: 2480 },
+          { label: 'Jul', income: 3200, expense: 2710 },
+          { label: 'Aug', income: 3350, expense: 2390 },
+          { label: 'Sep', income: 3200, expense: 2860 },
+          { label: 'Oct', income: 3400, expense: 2540 },
+        ];
+
+        // Current month's transactions (positive = income, negative = expense)
+        const transactions = [
+          { description: 'Monthly salary', category: 'Income', date: '2026-11-01', amount: 3200 },
+          { description: 'Freelance: logo design', category: 'Income', date: '2026-11-02', amount: 450 },
+          { description: 'Rent', category: 'Housing', date: '2026-11-01', amount: -900 },
+          { description: 'Grocery run', category: 'Food', date: '2026-11-02', amount: -86.4 },
+          { description: 'Electricity bill', category: 'Utilities', date: '2026-11-03', amount: -64.2 },
+          { description: 'Coffee with Sokha', category: 'Food', date: '2026-11-03', amount: -6.5 },
+          { description: 'Internet', category: 'Utilities', date: '2026-11-03', amount: -35 },
+          { description: 'Bus pass', category: 'Transport', date: '2026-10-31', amount: -22 },
+        ];
+
+        /* ---------- Derived numbers ---------- */
+        const incomeNow = transactions.filter((t) => t.amount > 0).reduce((s, t) => s + t.amount, 0);
+        const expenseNow = transactions.filter((t) => t.amount < 0).reduce((s, t) => s - t.amount, 0);
+        const current = { label: 'Nov', income: incomeNow, expense: expenseNow };
+        const prev = history[history.length - 1];
+        const months = [...history, current];
+
+        const balance = OPENING_BALANCE + months.reduce((s, m) => s + m.income - m.expense, 0);
+        const savingsRate = (m) => (m.income ? ((m.income - m.expense) / m.income) * 100 : 0);
+        const pctChange = (now, before) => (before ? ((now - before) / before) * 100 : 0);
+
+        /* ---------- Date line ---------- */
+        $('today').textContent = new Date().toLocaleDateString('en-US', {
+          weekday: 'long',
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+        });
+
+        /* ---------- Stats ---------- */
+        const ARROW_UP = '<path d="m22 7-8.5 8.5-5-5L2 17" /><path d="M16 7h6v6" />';
+        const ARROW_DOWN = '<path d="m22 17-8.5-8.5-5 5L2 7" /><path d="M16 17h6v-6" />';
+
+        // change: signed number; unit: suffix; goodWhenUp: whether an increase is positive
+        function renderDelta(el, change, unit, goodWhenUp) {
+          const up = change >= 0;
+          const good = up === goodWhenUp;
+          const tone = good ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700';
+          el.innerHTML = `
+            <span class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold ${tone}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-3.5">${up ? ARROW_UP : ARROW_DOWN}</svg>
+              ${up ? '+' : '−'}${Math.abs(change).toFixed(1)}${unit}
+            </span>
+            <span class="text-zinc-500">vs ${prev.label}</span>`;
+        }
+
+        $('stat-balance').textContent = usd(balance);
+
+        $('stat-income').textContent = usd(current.income);
+        renderDelta($('stat-income-delta'), pctChange(current.income, prev.income), '%', true);
+
+        $('stat-expenses').textContent = usd(current.expense);
+        renderDelta($('stat-expenses-delta'), pctChange(current.expense, prev.expense), '%', false);
+
+        $('stat-savings').textContent = `${savingsRate(current).toFixed(1)}%`;
+        renderDelta($('stat-savings-delta'), savingsRate(current) - savingsRate(prev), ' pts', true);
+
+        /* ---------- Cash flow chart (CSS bars) ---------- */
+        const CHART_H = 208; // px
+        const peak = Math.max(...months.flatMap((m) => [m.income, m.expense]));
+
+        $('chart').innerHTML = months
+          .map((m, i) => {
+            const isCurrent = i === months.length - 1;
+            const incH = (m.income / peak) * CHART_H;
+            const expH = (m.expense / peak) * CHART_H;
+            return `
+              <div class="flex flex-1 flex-col items-center">
+                <div class="flex w-full items-end justify-center gap-1.5" style="height:${CHART_H}px">
+                  <div class="w-full max-w-5 rounded-t-md bg-zinc-300 transition hover:bg-zinc-400" style="height:${incH}px" title="Income: ${usd(m.income)}"></div>
+                  <div class="w-full max-w-5 rounded-t-md bg-zinc-900 transition hover:bg-zinc-700" style="height:${expH}px" title="Expenses: ${usd(m.expense)}"></div>
+                </div>
+                <span class="mt-2 text-xs ${isCurrent ? 'font-semibold text-zinc-900' : 'text-zinc-500'}">${m.label}</span>
+              </div>`;
+          })
+          .join('');
+
+        /* ---------- Spending by category ---------- */
+        const byCategory = {};
+        transactions
+          .filter((t) => t.amount < 0)
+          .forEach((t) => {
+            byCategory[t.category] = (byCategory[t.category] || 0) - t.amount;
+          });
+        const totalSpent = Object.values(byCategory).reduce((a, b) => a + b, 0);
+        const BAR_COLORS = ['bg-zinc-900', 'bg-zinc-700', 'bg-zinc-500', 'bg-zinc-300'];
+
+        $('categories').innerHTML = Object.entries(byCategory)
+          .sort((a, b) => b[1] - a[1])
+          .map(([name, amount], i) => {
+            const share = totalSpent ? (amount / totalSpent) * 100 : 0;
+            return `
+              <li>
+                <div class="flex items-center justify-between gap-3 text-sm">
+                  <span class="font-medium text-zinc-700">${esc(name)}</span>
+                  <span class="whitespace-nowrap text-zinc-500">${usd(amount, { maximumFractionDigits: 2 })} · ${share.toFixed(0)}%</span>
+                </div>
+                <div class="mt-2 h-2 overflow-hidden rounded-full bg-zinc-100">
+                  <div class="h-full rounded-full ${BAR_COLORS[Math.min(i, BAR_COLORS.length - 1)]}" style="width:${share}%"></div>
+                </div>
+              </li>`;
+          })
+          .join('');
+
+        /* ---------- Recent transactions ---------- */
+        const shortDate = (iso) =>
+          new Date(`${iso}T00:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+        $('tx-body').innerHTML = [...transactions]
+          .sort((a, b) => b.date.localeCompare(a.date))
+          .slice(0, 6)
+          .map(
+            (t) => `
+              <tr class="transition hover:bg-zinc-50">
+                <td class="px-5 py-3.5 font-medium text-zinc-900 sm:px-6">${esc(t.description)}</td>
+                <td class="hidden px-5 py-3.5 sm:table-cell">
+                  <span class="rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-600">${esc(t.category)}</span>
+                </td>
+                <td class="whitespace-nowrap px-5 py-3.5 text-zinc-500">${shortDate(t.date)}</td>
+                <td class="whitespace-nowrap px-5 py-3.5 text-right font-semibold tabular-nums sm:px-6 ${t.amount > 0 ? 'text-emerald-600' : 'text-zinc-900'}">
+                  ${usd(t.amount, { minimumFractionDigits: 2, maximumFractionDigits: 2, signDisplay: 'always' })}
+                </td>
+              </tr>`
+          )
+          .join('');
+
+        /* ---------- Mobile sidebar ---------- */
+        const sidebar = $('sidebar');
+        const overlay = $('overlay');
+        const openBtn = $('open-sidebar');
+
+        function setSidebar(open) {
+          sidebar.classList.toggle('-translate-x-full', !open);
+          overlay.classList.toggle('hidden', !open);
+          openBtn.setAttribute('aria-expanded', String(open));
+        }
+
+        openBtn.addEventListener('click', () => setSidebar(true));
+        $('close-sidebar').addEventListener('click', () => setSidebar(false));
+        overlay.addEventListener('click', () => setSidebar(false));
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') setSidebar(false);
+        });
+      })();
+    </script>
+  </body>
+</html>
