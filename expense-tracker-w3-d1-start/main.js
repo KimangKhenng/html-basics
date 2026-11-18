@@ -34,11 +34,16 @@ const app = createApp({
             };
         }
 
+        const increaseCounter = () => {
+            counter.value++
+        }
+
         return {
             counter,
             transcations,
             formatMoney,
-            summarize
+            summarize,
+            increaseCounter
         }
     }
 })
