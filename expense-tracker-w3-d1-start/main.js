@@ -11,6 +11,24 @@ const app = createApp({
         ]
         )
 
+        const filteredType = ref('all')
+
+        const filteredTranscations = ref([
+            { "id": 1, "note": "Salary", "category": "Income", "type": "income", "amountCents": 30000 },
+            { "id": 2, "note": "Lunch", "category": "Food", "type": "expense", "amountCents": 450 },
+            { "id": 3, "note": "Bus", "category": "Transport", "type": "expense", "amountCents": 150 },
+            { "id": 4, "note": "Notebook", "category": "Study", "type": "expense", "amountCents": 300 }
+        ])
+
+        function filterByTypeUI(type) {
+            filteredType.value = type
+            if (type === 'all') {
+                filteredTranscations.value = transcations.value
+            } else {
+                filteredTranscations.value = transcations.value.filter((tx) => tx.type === type);
+            }
+        }
+
         function totalCents(list) {
             return list.reduce((sum, tx) => sum + tx.amountCents, 0);
         }
@@ -43,7 +61,10 @@ const app = createApp({
             transcations,
             formatMoney,
             summarize,
-            increaseCounter
+            increaseCounter,
+            filterByTypeUI,
+            filteredTranscations,
+            filteredType
         }
     }
 })
